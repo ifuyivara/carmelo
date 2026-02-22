@@ -1,0 +1,12 @@
+{
+  "name": "carmelo-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@slack/bolt": "^3.17.0",
+    "@google/generative-ai": "^0.15.0"
+  }
+}
