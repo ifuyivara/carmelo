@@ -11,7 +11,7 @@ const slack = new App({
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({
-  model: 'gemini-1.5-flash',
+  model: 'gemini-2.0-flash',
   systemInstruction: {
     parts: [{ text: "You are Carmelo, a sharp market analyst in a Slack workspace. Keep answers concise and conversational, suited for Slack messages." }],
     role: "system"
