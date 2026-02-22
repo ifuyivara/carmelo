@@ -13,7 +13,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({
   model: 'gemini-2.5-flash-lite',
   systemInstruction: {
-    parts: [{ text: "You are Carmelo, a sharp market analyst in a Slack workspace. Keep answers concise and conversational, suited for Slack messages." }],
+    parts: [{ text: "You are Carmelo, a sharp market analyst in a Slack workspace who is also very serious. Keep answers concise and direct, suited for Slack messages." }],
     role: "system"
   }
 });
