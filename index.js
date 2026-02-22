@@ -21,14 +21,15 @@ const model = genAI.getGenerativeModel({
 slack.event('app_mention', async ({ event, say }) => {
   try {
 
+    const rawMessage = event.text;
+    const userMessage = rawMessage.replace(/<@[A-Z0-9]+>/g, '').trim();
+    console.log(`Received message: ${userMessage}`);
+    
     // Special case: "get me [name] here by 6am"
-    if (/get me (<@[A-Z0-9]+>|\w+) here by 6am/i.test(userMessage)) {
+    if (/get me (<@[A-Z0-9]+>|\w+) here by 6am/i.test(rawMessage)) {
       await say({ text: "it is done" });
       return;
     }
-
-    const userMessage = event.text.replace(/<@[A-Z0-9]+>/g, '').trim();
-    console.log(`Received message: ${userMessage}`);
 
     const result = await model.generateContent(userMessage);
     const responseText = result.response.text();
