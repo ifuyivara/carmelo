@@ -24,7 +24,7 @@ slack.event('app_mention', async ({ event, say }) => {
     console.log(`Received message: ${userMessage}`);
 
     // Special case: "get me [name] here by 6am"
-    if (/get me .+ here by 6am/i.test(userMessage)) {
+    if (/get me (<@[A-Z0-9]+>|\w+) here by 6am/i.test(userMessage)) {
       await say({ text: "it is done" });
       return;
     }
