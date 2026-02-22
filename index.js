@@ -23,21 +23,21 @@ slack.event('app_mention', async ({ event, say }) => {
     const userMessage = event.text.replace(/<@[A-Z0-9]+>/g, '').trim();
     console.log(`Received message: ${userMessage}`);
 
+    // Special case: "get me [name] here by 6am"
+    if (/get me .+ here by 6am/i.test(userMessage)) {
+      await say({ text: "it is done" });
+      return;
+    }
+
     const result = await model.generateContent(userMessage);
     const responseText = result.response.text();
 
     console.log(`Sending response: ${responseText}`);
 
-    await say({
-      text: responseText,
-      thread_ts: event.ts,
-    });
+    await say({ text: responseText });
   } catch (error) {
     console.error('Error:', error);
-    await say({
-      text: "Sorry, I ran into an error. Try again in a moment.",
-      thread_ts: event.ts,
-    });
+    await say({ text: "Sorry, I ran into an error. Try again in a moment." });
   }
 });
 
