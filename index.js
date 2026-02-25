@@ -1,6 +1,7 @@
 const { App } = require('@slack/bolt');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const http = require('http');
+const { HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
 
 const slack = new App({
   token: process.env.SLACK_BOT_TOKEN,
