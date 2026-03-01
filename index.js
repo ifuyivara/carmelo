@@ -84,7 +84,6 @@ async function downloadImageAsBase64(url) {
 slack.event('app_mention', async ({ event, say }) => {
   try {
     
-    slack.event('app_mention', async ({ event, say }) => {
     console.log('Full event payload:', JSON.stringify(event, null, 2));
       
     const rawMessage = event.text;
