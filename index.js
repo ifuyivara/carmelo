@@ -71,6 +71,16 @@ async function getMorningBrief(tickers) {
   return result.response.text();
 }
 
+async function downloadImageAsBase64(url) {
+  const response = await fetch(url, {
+    headers: { Authorization: `Bearer ${process.env.SLACK_BOT_TOKEN}` }
+  });
+  const buffer = await response.arrayBuffer();
+  const base64 = Buffer.from(buffer).toString('base64');
+  const contentType = response.headers.get('content-type') || 'image/png';
+  return { base64, contentType };
+}
+
 slack.event('app_mention', async ({ event, say }) => {
   try {
     const rawMessage = event.text;
@@ -97,6 +107,27 @@ slack.event('app_mention', async ({ event, say }) => {
         await say({ text: brief, thread_ts: event.ts });
         return;
       }
+    }
+
+    // Handle image attachments
+    const files = event.files || [];
+    const imageFiles = files.filter(f => f.mimetype && f.mimetype.startsWith('image/'));
+    
+    if (imageFiles.length > 0) {
+      const now = new Date().toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: 'full', timeStyle: 'long' });
+      const parts = [];
+      parts.push({ text: `[Current time: ${now} Eastern]\n\n${userMessage || 'Analyze this image.'}` });
+    
+      for (const file of imageFiles) {
+        console.log(`Downloading image: ${file.name}`);
+        const { base64, contentType } = await downloadImageAsBase64(file.url_private);
+        parts.push({ inlineData: { mimeType: contentType, data: base64 } });
+      }
+    
+      const result = await callWithRetry(() => model.generateContent({ contents: [{ role: 'user', parts }] }));
+      const responseText = result.response.text();
+      await say({ text: responseText, thread_ts: event.ts });
+      return;
     }
 
     // Detect ticker symbols like $AAPL, $NVDA, $U
