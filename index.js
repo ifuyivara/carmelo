@@ -127,7 +127,7 @@ slack.event('app_mention', async ({ event, say }) => {
         parts.push({ inlineData: { mimeType: contentType, data: base64 } });
       }
     
-      const result = await callWithRetry(() => model.generateContent({ contents: [{ role: 'user', parts }] }));
+      const result = await model.generateContent({ contents: [{ role: 'user', parts }] });
       const responseText = result.response.text();
       await say({ text: responseText, thread_ts: event.ts });
       return;
